@@ -19,6 +19,7 @@ import java.util.Properties;
 import org.apache.logging.log4j.Logger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.logging.Level;
 //import java.util.logging.Level;
 import org.apache.logging.log4j.LogManager;
 /**
@@ -45,8 +46,9 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
     @Override
     public void doInvokeMethod(String MethodName, SiebelPropertySet input, SiebelPropertySet output)
             throws SiebelBusinessServiceException{
-         
-         try{
+        
+        if(MethodName.equalsIgnoreCase("DecodePDF")){
+            try{
             ip = InetAddress.getLocalHost();
             hIP = ip.getHostAddress();   
             LOG.info("IP is:"+hIP);
@@ -130,9 +132,28 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
              throw new SiebelBusinessServiceException("ERROR","error");
          }                    
         
-         
-         
-         
-     }     
-    
+                                
+        }
+        
+        if(MethodName.equalsIgnoreCase("GetNSSFId")){
+            MyLogging.log(Level.INFO, "=========IN GetNSSFId===============");
+            String file_name = input.getProperty("FileName");
+            MyLogging.log(Level.INFO,"File name is : "+file_name);
+            PLXDomParser pd = new PLXDomParser();
+            MyLogging.log(Level.INFO, "Calling parse method ===============");
+            pd.parseMemberRegistrationResponse(file_name);
+            MyLogging.log(Level.INFO, "Parse method completed===============");
+            MyLogging.log(Level.INFO, "Getting values ===============");
+            String resp_status = pd.getStatus();
+            MyLogging.log(Level.INFO, "response status is : "+resp_status);
+            String nssf_id = pd.getInsureId();
+            MyLogging.log(Level.INFO, "nssf id is : "+nssf_id);
+            String response_errors = pd.getErrors();
+            MyLogging.log(Level.INFO, "response errors is : "+response_errors);
+            output.setProperty("response_status",resp_status );
+            output.setProperty("nssf_id",nssf_id );
+            output.setProperty("response_errors",response_errors );
+        }
+             
+    }
 }
