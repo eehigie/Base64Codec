@@ -47,7 +47,7 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
     public void doInvokeMethod(String MethodName, SiebelPropertySet input, SiebelPropertySet output)
             throws SiebelBusinessServiceException{
         
-        if(MethodName.equalsIgnoreCase("DecodePDF")){
+        if(MethodName.equalsIgnoreCase("DecodeFile")){
             try{
             ip = InetAddress.getLocalHost();
             hIP = ip.getHostAddress();   
