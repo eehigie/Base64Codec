@@ -145,10 +145,19 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
             MyLogging.log(Level.INFO, "Parse method completed===============");
             MyLogging.log(Level.INFO, "Getting values ===============");
             String resp_status = pd.getStatus();
+            if(resp_status == null){
+                resp_status = "";
+            }
             MyLogging.log(Level.INFO, "response status is : "+resp_status);
             String nssf_id = pd.getInsureId();
+            if(nssf_id == null){
+                nssf_id = "";
+            }
             MyLogging.log(Level.INFO, "nssf id is : "+nssf_id);
             String response_errors = pd.getErrors();
+            if(response_errors == null){
+                response_errors = "";
+            }
             MyLogging.log(Level.INFO, "response errors is : "+response_errors);
             output.setProperty("response_status",resp_status );
             output.setProperty("nssf_id",nssf_id );
