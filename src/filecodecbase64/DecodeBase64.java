@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 //import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 //import java.io.PrintWriter;
 //import java.io.StringWriter;
 import java.util.Properties;
@@ -42,24 +44,24 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
     private String prod_ip = "";
     private String local_ip = "";
     private static String prop_file_path = null;
+    private final StringWriter errors = new StringWriter();
     
     @Override
     public void doInvokeMethod(String MethodName, SiebelPropertySet input, SiebelPropertySet output)
             throws SiebelBusinessServiceException{
         
         if(MethodName.equalsIgnoreCase("DecodeFile")){
+            MyLogging.log(Level.INFO, "=========IN DecodeFile===============");
             try{
             ip = InetAddress.getLocalHost();
             hIP = ip.getHostAddress();   
-            LOG.info("IP is:"+hIP);
+            MyLogging.log(Level.INFO,"IP is:"+hIP);
             //get filepath properties
-            LOG.info("loading properties");
+            MyLogging.log(Level.INFO,"loading properties");
             Properties prop = new Properties();        
             InputStream input_prop = null;
-            
-            
-            uat_ip = prop.getProperty("uat_ip");
-            
+                        
+            uat_ip = prop.getProperty("uat_ip");            
             local_ip = prop.getProperty("local_ip");
             if(OS.contains("nix")|| OS.contains("nux")){
                 if(hIP.equalsIgnoreCase(prod_ip)){                                        
@@ -100,11 +102,11 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
             }
             
             //get filename from input object
-            LOG.info("get file properties");
+            MyLogging.log(Level.INFO,"get file properties");
             base64_filename = input.getProperty("filename");
             base64_file = input.getProperty("file");
-            LOG.info("encoded file is "+encoded_filepath+base64_file);
-            LOG.info("decoded file is "+decoded_filepath+base64_file);
+            MyLogging.log(Level.INFO,"encoded file is "+encoded_filepath+base64_file);
+            MyLogging.log(Level.INFO,"decoded file is "+decoded_filepath+base64_file);
             FileCodecBase64 decoder = new FileCodecBase64();
             isDecoded = decoder.decode(base64_filename, decoded_filepath+base64_file);
             
@@ -114,21 +116,25 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
             }
             
             
-         }catch(UnknownHostException uhe){
-             LOG.error("Error in doInvoke", uhe);
-             output.setProperty("ErrorMessage", uhe.getMessage());
+         }catch(UnknownHostException ex){             
+             ex.printStackTrace(new PrintWriter(errors));
+             MyLogging.log(Level.SEVERE, "UNKNOWN_HOST ERROR: " + errors.toString());
+             output.setProperty("ErrorMessage", errors.toString());
              throw new SiebelBusinessServiceException("UNKNOWN_HOST","Host not found");
-         }catch(FileNotFoundException fnfe){
-             LOG.error("File not found", fnfe);
-             output.setProperty("ErrorMessage", fnfe.getMessage());
+         }catch(FileNotFoundException ex){
+             ex.printStackTrace(new PrintWriter(errors));
+             MyLogging.log(Level.SEVERE, "FILE_NOT_FOUND ERROR: " + errors.toString());
+             output.setProperty("ErrorMessage", errors.toString());
              throw new SiebelBusinessServiceException("FILE_NOT_FOUND","File not found");
-         }catch(IOException ioe){
-             LOG.error("Error", ioe);
-             output.setProperty("ErrorMessage", ioe.getMessage());
-             throw new SiebelBusinessServiceException("ERROR","error");
-         }catch(Exception e){
-             LOG.error("Error", e);
-             output.setProperty("ErrorMessage", e.getMessage());
+         }catch(IOException ex){
+             ex.printStackTrace(new PrintWriter(errors));
+             MyLogging.log(Level.SEVERE, "IO_EXCEPTION ERROR: " + errors.toString());
+             output.setProperty("ErrorMessage", errors.toString());
+             throw new SiebelBusinessServiceException("IO_EXCEPTION","error");
+         }catch(Exception ex){
+             ex.printStackTrace(new PrintWriter(errors));
+             MyLogging.log(Level.SEVERE, "ERROR: " + errors.toString());
+             output.setProperty("ErrorMessage", errors.toString());
              throw new SiebelBusinessServiceException("ERROR","error");
          }                    
         
@@ -144,17 +150,17 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
             pd.parseMemberRegistrationResponse(file_name);
             MyLogging.log(Level.INFO, "Parse method completed===============");
             MyLogging.log(Level.INFO, "Getting values ===============");
-            String resp_status = pd.getStatus();
+            String resp_status = pd.getMemberRegistrationStatus();
             if(resp_status == null){
                 resp_status = "";
             }
             MyLogging.log(Level.INFO, "response status is : "+resp_status);
-            String nssf_id = pd.getInsureId();
+            String nssf_id = pd.getMemberRegistrationInsureId();
             if(nssf_id == null){
                 nssf_id = "";
             }
             MyLogging.log(Level.INFO, "nssf id is : "+nssf_id);
-            String response_errors = pd.getErrors();
+            String response_errors = pd.getMemberRegistrationErrors();
             if(response_errors == null){
                 response_errors = "";
             }

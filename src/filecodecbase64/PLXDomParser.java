@@ -28,6 +28,10 @@ public class PLXDomParser {
     private String insuredId;
     private String response_status;
     private String response_errors;
+    private String generate_statement_message;
+    private String generate_statement_base64_txt;
+    private String generate_statement_response_code;
+    private String generate_statement_status;
     private final StringWriter errors = new StringWriter();
     
     public void parseMemberRegistrationResponse(String fileName){
@@ -70,15 +74,75 @@ public class PLXDomParser {
       } 
     }
     
-    public String getInsureId(){        
+    public void parseGenerateStatementResponse(String fileName){
+        try {	
+         //File inputFile = new File("C:\\Temp\\docs\\input2.txt");
+         File inputFile = new File(fileName);
+         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	 Document doc = dBuilder.parse(inputFile);
+         doc.getDocumentElement().normalize();
+	 MyLogging.log(Level.INFO,"Root element :" + doc.getDocumentElement().getNodeName());
+         NodeList nList = doc.getElementsByTagName("fieldType");
+	 MyLogging.log(Level.INFO,"----------------------------");
+         for (int temp = 0; temp < nList.getLength(); temp++) {
+            Node nNode = nList.item(temp);
+            MyLogging.log(Level.INFO,"Current Element :" + nNode.getNodeName());
+            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+		Element eElement = (Element) nNode;
+                String element_name  = eElement.getElementsByTagName("name").item(0).getTextContent();                
+                MyLogging.log(Level.INFO,"name : " + eElement.getElementsByTagName("name").item(0).getTextContent());		
+		MyLogging.log(Level.INFO,"value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+                if(element_name.equalsIgnoreCase("message")){
+                    generate_statement_message  = eElement.getElementsByTagName("value").item(0).getTextContent();;
+                }else if(element_name.equalsIgnoreCase("status")){
+                    generate_statement_status = eElement.getElementsByTagName("value").item(0).getTextContent();    
+                }else if(element_name.equalsIgnoreCase("responseCode")){
+                    generate_statement_response_code = eElement.getElementsByTagName("value").item(0).getTextContent();
+                }else if(element_name.equalsIgnoreCase("pdfRet")){
+                    generate_statement_base64_txt = eElement.getElementsByTagName("value").item(0).getTextContent();
+                }
+            }
+        }
+      } catch(IOException ex){
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "IO_EXCEPTION ERROR: " + errors.toString());
+      }catch(ParserConfigurationException ex){
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "PARSER_CONFIGURATION_EXCEPTION ERROR: " + errors.toString());
+      }catch (SAXException ex) {
+            ex.printStackTrace(new PrintWriter(errors));
+            MyLogging.log(Level.SEVERE, "SAX_EXCEPTION ERROR: " + errors.toString());
+      } 
+    }
+    
+    
+    public String getGenerateStatementMessage(){
+        return generate_statement_message;
+    }
+    
+    public String getGenerateStatementStatus(){
+        return generate_statement_status;
+    }
+    
+    public String getGenerateStatementResponseCode(){
+        return generate_statement_response_code;
+    }
+    
+    public String getGenerateStatementBase64Text(){
+        return generate_statement_base64_txt;
+    }
+    
+        
+    public String getMemberRegistrationInsureId(){        
         return insuredId;
     }
     
-    public String getStatus(){
+    public String getMemberRegistrationStatus(){
         return response_status;
     }
     
-    public String getErrors(){
+    public String getMemberRegistrationErrors(){
         return response_errors;
     }
     

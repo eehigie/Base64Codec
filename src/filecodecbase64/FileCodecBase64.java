@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
  
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 /**
  *
  * @author gbege
@@ -33,7 +34,17 @@ public class FileCodecBase64 {
         writeByteArraysToFile(targetFile, decodedBytes);
         return true;
     }
- 
+    
+    public String decodeText(String s,String targetFile) {
+        return StringUtils.newStringUtf8(Base64.decodeBase64(s));        
+    }
+    
+    public boolean decodeString(String s, String targetFile) throws IOException{
+        byte[] decoded = Base64.decodeBase64(s);
+        writeByteArraysToFile(targetFile, decoded);
+        return true;
+    }
+    
     /**
      * This method loads a file from file system and returns the byte array of the content.
      *
