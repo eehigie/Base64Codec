@@ -146,11 +146,16 @@ public class PLXDomParser {
         return response_errors;
     }
     
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         PLXDomParser pd = new PLXDomParser();
-        pd.parseMemberRegistrationResponse("C:\\\\Temp\\\\docs\\\\input2.txt");
-        MyLogging.log(Level.INFO, "InsureId is: "+pd.getInsureId());
+        //pd.parseMemberRegistrationResponse("C:\\Temp\\docs\\input2.txt");
+        pd.parseGenerateStatementResponse("C:\\hdk\\files\\encoded\\NSSF_Statement_6222017_204045.txt");
+        MyLogging.log(Level.INFO, "message is: "+pd.getGenerateStatementMessage());
+        MyLogging.log(Level.INFO, "status is: "+pd.getGenerateStatementStatus());
+        MyLogging.log(Level.INFO, "response code is: "+pd.getGenerateStatementResponseCode());
+        MyLogging.log(Level.INFO, "base 64 text is: "+pd.getGenerateStatementBase64Text());
+        /*MyLogging.log(Level.INFO, "InsureId is: "+pd.getInsureId());
         MyLogging.log(Level.INFO, "status is: "+pd.getStatus());
-        MyLogging.log(Level.INFO, "error is: "+pd.getErrors());
-    }*/
+        MyLogging.log(Level.INFO, "error is: "+pd.getErrors());*/
+    }
 }

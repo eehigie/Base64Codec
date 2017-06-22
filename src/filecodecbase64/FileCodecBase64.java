@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.logging.Level;
  
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.StringUtils;
@@ -95,7 +96,11 @@ public class FileCodecBase64 {
         //fos = new FileOutputStream("/home/gbege/Documents/files/something-decoded.pdf");
         //fos.write(decoded);
         //fos.close();
-        
+        FileCodecBase64 fcb = new FileCodecBase64();
+        PLXDomParser pd = new PLXDomParser();        
+        pd.parseGenerateStatementResponse("C:\\hdk\\files\\encoded\\NSSF_Statement_6222017_204045.txt");        
+        String base64Txt = pd.getGenerateStatementBase64Text();
+        fcb.decodeString(base64Txt, "C:\\hdk\\files\\decoded\\NSSF_Statement_6222017_204045.pdf");
     }
     
 }
