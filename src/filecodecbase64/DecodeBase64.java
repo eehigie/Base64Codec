@@ -100,19 +100,29 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
                 encoded_filepath = prop.getProperty("win_encoded_filepath");
                 decoded_filepath = prop.getProperty("win_decoded_filepath"); 
             }
-            
+            String base64Txt = "";
             //get filename from input object
             MyLogging.log(Level.INFO,"get file properties");
             base64_filename = input.getProperty("filename");
             base64_file = input.getProperty("file");
+            String fileType = input.getProperty("filetype");
+            MyLogging.log(Level.INFO,"fileType is "+fileType);
             MyLogging.log(Level.INFO,"encoded file is "+base64_file);
             MyLogging.log(Level.INFO,"decoded file is "+decoded_filepath+base64_filename);
             FileCodecBase64 decoder = new FileCodecBase64();
             PLXDomParser pd = new PLXDomParser();
             MyLogging.log(Level.INFO,"Calling Parsing Method to Parse XML File .......");
-            pd.parseGenerateStatementResponse(base64_file);
-            MyLogging.log(Level.INFO,"Parse XML File DONE.......");            
-            String base64Txt = pd.getGenerateStatementBase64Text();
+            
+            if(fileType.equalsIgnoreCase("GenerateStatement")){
+                pd.parseGenerateStatementResponse(base64_file);
+                MyLogging.log(Level.INFO,"Parse XML File DONE.......");            
+                base64Txt = pd.getGenerateStatementBase64Text();
+            }else if(fileType.equalsIgnoreCase("MemberStatement")){                
+                pd.parseMemberStatementResponse(base64_file);
+                MyLogging.log(Level.INFO,"Parse XML File DONE.......");            
+                base64Txt = pd.getMemberStatementBase64Text();
+            }
+                        
             MyLogging.log(Level.INFO,"Base 64 text is "+base64Txt);
             MyLogging.log(Level.INFO,"Calling Method to decode base 64 string and write to PDF File .......");                              
             isDecoded = decoder.decodeString(base64Txt, decoded_filepath+base64_filename);
