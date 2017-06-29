@@ -61,38 +61,17 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
             Properties prop = new Properties();        
             InputStream input_prop = null;
                         
-            uat_ip = prop.getProperty("uat_ip");            
+            uat_ip = prop.getProperty("uat_ip");  
+            MyLogging.log(Level.INFO,"uat_ip is:"+uat_ip);
             local_ip = prop.getProperty("local_ip");
-            if(OS.contains("nix")|| OS.contains("nux")){
-                if(hIP.equalsIgnoreCase(prod_ip)){                                        
-                    prop_file_path = "/home/siebprod/hdk/service.properties";
-                    input_prop = new FileInputStream(prop_file_path);
-                    prop.load(input_prop);
-                    prod_ip = prop.getProperty("prod_ip");
-                    encoded_filepath = prop.getProperty("prod_nix_encoded_filepath");
-                    decoded_filepath = prop.getProperty("prod_nix_decoded_filepath");
-                }else if(hIP.equalsIgnoreCase(uat_ip)){
-                    prop_file_path = "/home/siebtest/hdk/service.properties";
-                    input_prop = new FileInputStream(prop_file_path);
-                    prop.load(input_prop);
-                    prod_ip = prop.getProperty("uat_ip");                    
-                    encoded_filepath = prop.getProperty("uat_nix_encoded_filepath");
-                    decoded_filepath = prop.getProperty("uat_nix_decoded_filepath");
-                }else if(hIP.equalsIgnoreCase(dev_ip)){ 
-                    prop_file_path = "/home/siebdev/hdk/service.properties";
-                    input_prop = new FileInputStream(prop_file_path);
-                    prop.load(input_prop);
-                    dev_ip = prop.getProperty("dev_ip");                    
-                    encoded_filepath = prop.getProperty("dev_nix_encoded_filepath");
-                    decoded_filepath = prop.getProperty("dev_nix_decoded_filepath");
-                }else if(hIP.equalsIgnoreCase(local_ip)){ 
-                    prop_file_path = "/home/gbege/lib/hdk/service.properties";
-                    input_prop = new FileInputStream(prop_file_path);
-                    prop.load(input_prop);
-                    dev_ip = prop.getProperty("local_ip");                    
-                    encoded_filepath = prop.getProperty("local_nix_encoded_filepath");
-                    decoded_filepath = prop.getProperty("local_nix_decoded_filepath");
-                }
+            if(OS.contains("nix")|| OS.contains("nux")){                 
+                prop_file_path = "/usr/app/siebel/intg/service.properties";
+                input_prop = new FileInputStream(prop_file_path);
+                prop.load(input_prop);                                  
+                encoded_filepath = prop.getProperty("nix_encoded_filepath");
+                MyLogging.log(Level.INFO,"encoded_filepath is:"+encoded_filepath);
+                decoded_filepath = prop.getProperty("nix_decoded_filepath");   
+                MyLogging.log(Level.INFO,"decoded_filepath is:"+decoded_filepath);
             }else if(OS.contains("win")){
                 prop_file_path = "D:\\hdk\\service.properties";
                 input_prop = new FileInputStream(prop_file_path);
