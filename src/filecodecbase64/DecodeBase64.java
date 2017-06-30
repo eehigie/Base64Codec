@@ -93,24 +93,40 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
             MyLogging.log(Level.INFO,"Calling Parsing Method to Parse XML File .......");
             
             if(fileType.equalsIgnoreCase("GenerateStatement")){
+                MyLogging.log(Level.INFO,"In GenerateStatement ..........");
                 pd.parseGenerateStatementResponse(base64_file);
                 MyLogging.log(Level.INFO,"Parse XML File DONE.......");            
                 base64Txt = pd.getGenerateStatementBase64Text();
-            }else if(fileType.equalsIgnoreCase("MemberStatement")){                
+            }else if(fileType.equalsIgnoreCase("MemberStatement")){   
+                MyLogging.log(Level.INFO,"In MemberStatement ..........");
                 pd.parseMemberStatementResponse(base64_file);
                 MyLogging.log(Level.INFO,"Parse XML File DONE.......");            
                 base64Txt = pd.getMemberStatementBase64Text();
+            }else if(fileType.equalsIgnoreCase("SMSResponse")){ 
+                MyLogging.log(Level.INFO,"In SMSResponse ..........");
+                pd.parseSMSResponse(base64_file);
+                MyLogging.log(Level.INFO,"Parse XML File DONE.......");            
+                String smsReceived = pd.getSMSReceived();
+                String smsStatus = pd.getSMSStatus();
+                MyLogging.log(Level.INFO, "sms received is: "+smsReceived);
+                MyLogging.log(Level.INFO, "sms status is: "+smsStatus);
+                output.setProperty("SMSReceived", smsReceived);
+                output.setProperty("SMSStatus", smsStatus);
+                output.setProperty("ErrorMessage", "");
+            }
+            
+            if(fileType.equalsIgnoreCase("GenerateStatement") || fileType.equalsIgnoreCase("MemberStatement") ){
+                MyLogging.log(Level.INFO,"Base 64 text is "+base64Txt);
+                MyLogging.log(Level.INFO,"Calling Method to decode base 64 string and write to PDF File .......");                              
+                isDecoded = decoder.decodeString(base64Txt, decoded_filepath+base64_filename);
+                MyLogging.log(Level.INFO,"Decode base 64 string and write to PDF File DONE.......");
             }
                         
-            MyLogging.log(Level.INFO,"Base 64 text is "+base64Txt);
-            MyLogging.log(Level.INFO,"Calling Method to decode base 64 string and write to PDF File .......");                              
-            isDecoded = decoder.decodeString(base64Txt, decoded_filepath+base64_filename);
-            MyLogging.log(Level.INFO,"Decode base 64 string and write to PDF File DONE.......");
-            
             if(isDecoded){
                 output.setProperty("Decoded_File", decoded_filepath+base64_filename);
                 output.setProperty("ErrorMessage", "");
-            }                        
+            } 
+            
          }catch(UnknownHostException ex){             
              ex.printStackTrace(new PrintWriter(errors));
              MyLogging.log(Level.SEVERE, "UNKNOWN_HOST ERROR: " + errors.toString());
