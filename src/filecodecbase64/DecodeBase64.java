@@ -38,11 +38,7 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
     private static String base64_filename = "";
     private static boolean isDecoded = false;
     private String encoded_filepath = "";
-    private String decoded_filepath = "";
-    private String dev_ip = "";
-    private String uat_ip = "";
-    private String prod_ip = "";
-    private String local_ip = "";
+    private String decoded_filepath = ""; 
     private static String prop_file_path = null;
     private final StringWriter errors = new StringWriter();
     
@@ -60,10 +56,7 @@ public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
             MyLogging.log(Level.INFO,"loading properties");
             Properties prop = new Properties();        
             InputStream input_prop = null;
-                        
-            uat_ip = prop.getProperty("uat_ip");  
-            MyLogging.log(Level.INFO,"uat_ip is:"+uat_ip);
-            local_ip = prop.getProperty("local_ip");
+                                                    
             if(OS.contains("nix")|| OS.contains("nux")){                 
                 prop_file_path = "/usr/app/siebel/intg/service.properties";
                 input_prop = new FileInputStream(prop_file_path);
