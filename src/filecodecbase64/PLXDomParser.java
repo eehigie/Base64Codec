@@ -238,11 +238,11 @@ public class PLXDomParser {
         return smsStatus;
     }
     
-    public static void main(String[] args) {
-        PLXDomParser pd = new PLXDomParser();
+    //public static void main(String[] args) {
+    //    PLXDomParser pd = new PLXDomParser();
         //pd.parseMemberRegistrationResponse("C:\\Temp\\docs\\input2.txt");
         //pd.parseGenerateStatementResponse("C:\\hdk\\files\\encoded\\NSSF_Statement_6222017_204045.txt");
-        pd.parseSMSResponse("C:\\Temp\\docs\\input3.txt");
+    //    pd.parseSMSResponse("C:\\Temp\\docs\\input3.txt");
         /*MyLogging.log(Level.INFO, "message is: "+pd.getGenerateStatementMessage());
         MyLogging.log(Level.INFO, "status is: "+pd.getGenerateStatementStatus());
         MyLogging.log(Level.INFO, "response code is: "+pd.getGenerateStatementResponseCode());
@@ -250,7 +250,7 @@ public class PLXDomParser {
         MyLogging.log(Level.INFO, "InsureId is: "+pd.getMemberRegistrationInsureId());
         MyLogging.log(Level.INFO, "status is: "+pd.getMemberRegistrationStatus());
         MyLogging.log(Level.INFO, "error is: "+pd.getMemberRegistrationErrors());*/
-        MyLogging.log(Level.INFO, "sms received is: "+pd.getSMSReceived());
-        MyLogging.log(Level.INFO, "sms status is: "+pd.getSMSStatus());
-    }
+    //    MyLogging.log(Level.INFO, "sms received is: "+pd.getSMSReceived());
+    //    MyLogging.log(Level.INFO, "sms status is: "+pd.getSMSStatus());
+    //}
 }

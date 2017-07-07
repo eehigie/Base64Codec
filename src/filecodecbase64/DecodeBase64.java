@@ -6,31 +6,23 @@
 package filecodecbase64;
 import com.siebel.data.SiebelPropertySet;
 import com.siebel.eai.SiebelBusinessServiceException;
-//import java.io.BufferedWriter;
-//import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-//import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-//import java.io.PrintWriter;
-//import java.io.StringWriter;
 import java.util.Properties;
-import org.apache.logging.log4j.Logger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
-//import java.util.logging.Level;
-import org.apache.logging.log4j.LogManager;
+
 /**
  *
  * @author gbege
  */
 public class DecodeBase64 extends com.siebel.eai.SiebelBusinessService{
-    
-    private static final Logger LOG = LogManager.getLogger("DecodeBase64");
+        
     private static InetAddress ip = null;
     private static String hIP = "";
     private static final String OS = System.getProperty("os.name").toLowerCase();    
